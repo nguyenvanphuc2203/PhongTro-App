@@ -13,6 +13,7 @@ import { Router, Scene } from 'react-native-router-flux';
 import Home from './components/home/home';
 import Detail from './components/maps/detail';
 import Wellcome from './components/wellcome/wellcome';
+import Formchothue from './components/mapchothue/formchothue';
 
 /**
  * transaction route config 
@@ -60,6 +61,10 @@ export default class App extends React.Component {
             <Scene key="Detail"
               component={Detail}
               title="Chi Tiết"
+            />
+            <Scene key="Formchothue"
+              component={Formchothue}
+              title="form Cho Thuê"
             />
           </Scene>
         </Router>

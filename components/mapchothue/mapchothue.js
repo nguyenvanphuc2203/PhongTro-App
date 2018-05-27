@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import MapView,{ Marker,Callout, AnimatedRegion, Animated } from 'react-native-maps';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import { Actions } from 'react-native-router-flux';
 
 const styles = StyleSheet.create({
   container: {
@@ -78,6 +79,13 @@ export default class MapChoThue extends React.Component {
           console.error(error);
         });
     }
+  onDragEnd(e){
+    this.setState({ coordinate: e.nativeEvent.coordinate});
+    if (this.state.coordinate.latitude == 0)
+      alert('Tọa độ hiện tại '+this.state.coordinate.latitude)
+    else
+    Actions.Formchothue({location:this.state.coordinate})
+  }
   render() {
     return (
       <View style ={styles.container}>
@@ -156,9 +164,9 @@ export default class MapChoThue extends React.Component {
             <Marker draggable
               coordinate={this.state.initialPosition}
               image={require('../images/pin.png')}
-              title='đây là vị trí của bạn'
-              description='clicked'
-              onDragEnd={(e) => {this.setState({ coordinate: e.nativeEvent.coordinate}) ;alert(this.state.coordinate.latitude) }}
+              title='Nhấn Giữ Để Chọn'
+              description='Drag to pick'
+              onDragEnd={(e) => { this.onDragEnd(e) }}
             >
             </Marker>
           </MapView>

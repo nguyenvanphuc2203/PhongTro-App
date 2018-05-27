@@ -31,9 +31,14 @@ class Profile extends Component{
   static navigationOptions = () => ({
     header: null,
   })
-  
+  logoutFacebook = (e)=>{ 
+    let { dispatch } = this.props;
+    dispatch({type:'LOGOUT'})
+    console.log(this.props.UserData);
+    Actions.Wellcome()
+  }
   render(){
-    let avatar = this.state.avatarSource;
+    let { UserData } = this.props;
     return (
       <View style={stylePayment.main}>
         <View style={{flex:1/13,flexDirection:"row",justifyContent:'center',backgroundColor:'#f1f8fe'}}>
@@ -41,7 +46,7 @@ class Profile extends Component{
             <Icon name="ios-arrow-round-back" size={40} color="red" />
           </TouchableOpacity>
           <View style={{flex:7,justifyContent:'center'}}> 
-            <Text> Thành viên Metiz </Text>
+            <Text> {UserData.name} </Text>
             <Text style={{color:'#333',fontSize:10}}> Thông tin cá nhân</Text>
           </View>
           <View style={{flex:2,justifyContent:'center'}}> 
@@ -52,42 +57,18 @@ class Profile extends Component{
                 <TouchableOpacity onPress={()=>{}}>
                   <Image
                     style={{width:100,height:100,borderRadius:50}}
-                    source={avatar}
+                    source={{uri:UserData.picture.data.url}}
                    />
                 </TouchableOpacity>
             </View>
-            <View style={{flex:3,padding:10}}>
-                <Text>Nguyễn Phúc</Text>
-                <Text>0912292829292</Text>
+            <View style={{flex:3,padding:10,alignItems:'center'}}>
+                <Text>{UserData.name}</Text>
+                <Text>{UserData.id}</Text>
             </View>
         </View>
         <View style={{flex:8/13,flexDirection:'column',backgroundColor:'#e9ebee',justifyContent:'center'}}>
             <View style={{flex:9,backgroundColor:'#eaebee'}}>
                 <ScrollView>
-                    <View style={stylePayment.title}>
-                        <Text>Khuyến mãi của bạn</Text>
-                    </View>
-                    <View style={{height:viewportHeight*0.15,marginTop:5,backgroundColor:'#fff'}}>
-                        <View style={{flex:1,flexDirection:'column'}}>
-                            <View style={stylePayment.rowitem}>
-                                <View style={stylePayment.itemleft}>
-                                    <Text >Điểm Metiz </Text>
-                                </View>
-                                <View style={stylePayment.itemright}>
-                                    <Text >12.000 </Text>
-                                </View>
-                            </View>
-                            <View style={stylePayment.rowitem}>
-                                <View style={stylePayment.itemleft}>
-                                    <Text >Thẻ Quà Tặng </Text>
-                                </View>
-                                <View style={stylePayment.itemright}>
-                                    <Text > 1</Text>
-                                </View>
-                                
-                            </View>
-                        </View>
-                    </View>
                     <View style={stylePayment.title}>
                         <Text>Thông tin cá nhân</Text>
                     </View>
@@ -95,7 +76,7 @@ class Profile extends Component{
                         <View style={{flex:1,flexDirection:'column'}}>
                             <View style={stylePayment.rowitem}>
                                 <View style={stylePayment.itemleft}>
-                                    <Text >Thông tin tài khoản </Text>
+                                    <Text >{UserData.email} </Text>
                                 </View>
                                 <View style={stylePayment.itemright}>
                                     <Icon name="ios-arrow-forward" size={30} color="#333" />
@@ -104,7 +85,7 @@ class Profile extends Component{
                             </View>
                             <View style={stylePayment.rowitem}>
                                 <View style={stylePayment.itemleft}>
-                                    <Text >Đổi mật khẩu </Text>
+                                    <Text >Age : {UserData.age_range.min} </Text>
                                 </View>
                                 <View style={stylePayment.itemright}>
                                     <Icon name="ios-arrow-forward" size={30} color="#333" />
@@ -113,7 +94,7 @@ class Profile extends Component{
                             </View>
                             <View style={stylePayment.rowitem}>
                                 <View style={stylePayment.itemleft}>
-                                    <Text >Thẻ Thành Viên </Text>
+                                    <Text >{UserData.gender} </Text>
                                 </View>
                                 <View style={stylePayment.itemright}>
                                     <Icon name="ios-arrow-forward" size={30} color="#333" />
@@ -129,56 +110,38 @@ class Profile extends Component{
                         <View style={{flex:1,flexDirection:'column'}}>
                             <View style={stylePayment.rowitem}>
                                 <View style={stylePayment.itemleft}>
-                                    <Text >Lịch sử giao dịch </Text>
+                                    <Text >Lịch sử đăng tin </Text>
                                 </View>
                                 <View style={stylePayment.itemright}>
-                                    <Text >12.000 đ </Text>
+                                    <Text >2 </Text>
                                 </View>
                                 
                             </View>
                             <View style={stylePayment.rowitem}>
                                 <View style={stylePayment.itemleft}>
-                                    <Text >Phim đã xem </Text>
+                                    <Text >Đánh Giá </Text>
                                 </View>
                                 <View style={stylePayment.itemright}>
-                                    <Text > 2 </Text>
+                                    <Text > 3 </Text>
                                 </View>
                                 
                             </View>
                         </View>
                     </View>
                     <View style={stylePayment.title}>
-                        <Text>LIÊN KẾT TÀI KHOẢN NGÂN HÀNG</Text>
+                        <Text>Menu</Text>
                     </View>
-                    <View style={{height:viewportHeight*0.2,marginTop:5,backgroundColor:'#fff'}}>
-                    <View style={{flex:1,flexDirection:'column'}}>
-                            <View style={stylePayment.rowitem}>
+                    <View style={{height:viewportHeight*0.07,marginTop:5,backgroundColor:'#fff'}}>
+                        <View style={{flex:1,flexDirection:'column'}}>
+                            <TouchableOpacity onPress={this.logoutFacebook.bind(this)} style={stylePayment.rowitem}>
                                 <View style={stylePayment.itemleft}>
-                                    <Text >Ví MOMO </Text>
+                                    <Text >Đăng Xuất </Text>
                                 </View>
                                 <View style={stylePayment.itemright}>
-                                    <Text >90.000 đ </Text>
+                                    <Icon name="ios-arrow-forward" size={30} color="#333" />
                                 </View>
                                 
-                            </View>
-                            <View style={stylePayment.rowitem}>
-                                <View style={stylePayment.itemleft}>
-                                    <Text >Visa - MasterCard </Text>
-                                </View>
-                                <View style={stylePayment.itemright}>
-                                    <Text > 0 đ</Text>
-                                </View>
-                                
-                            </View>
-                            <View style={stylePayment.rowitem}>
-                                <View style={stylePayment.itemleft}>
-                                    <Text >ATM Nội địa </Text>
-                                </View>
-                                <View style={stylePayment.itemright}>
-                                    <Text > 90.000 đ</Text>
-                                </View>
-                                
-                            </View>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </ScrollView>

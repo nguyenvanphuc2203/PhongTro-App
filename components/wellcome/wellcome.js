@@ -18,6 +18,7 @@ import FBLoginView from './FBLoginView';
 class Wellcome extends Component{
 
   componentWillMount(){
+    
     // if( this.props.UserData.isLogin ) {
       Actions.Home()
     // }
@@ -30,6 +31,17 @@ class Wellcome extends Component{
     dispatch({type:'LOGIN_SUCCESS',data: e.profile})
     console.log(e);
     console.log(this.props.UserData);
+    // add database
+    fetch('https://phongtro-nodejs.herokuapp.com/adduser', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        user: this.props.UserData,
+      }),
+    });
     Actions.Home()
   }
   render(){

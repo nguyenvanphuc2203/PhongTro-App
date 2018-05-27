@@ -7,7 +7,7 @@ const UserData = (state = {isLogin:false} ,action) => {
       case 'LOGIN_SUCCESS':
           return {...action.data,isLogin:true};
       case 'LOGOUT':
-          return {isLogin:false};
+          return {...state,isLogin:false};
       default:
           return {isLogin:false}
   }

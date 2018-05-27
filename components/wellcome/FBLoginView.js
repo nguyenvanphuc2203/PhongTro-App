@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import PropTypes from 'prop-types';
 import Icon from 'react-native-vector-icons/FontAwesome';
-
+import { connect } from 'react-redux'
 
 class FBLoginView extends Component {
     static contextTypes = {
@@ -17,6 +17,7 @@ class FBLoginView extends Component {
     }
 
     render(){
+        if ( !this.props.UserData.isLogin ) this.context.logout()
         return (
           <View style={[]}>
           {( !this.context.isLoggedIn ) ? 
@@ -28,16 +29,17 @@ class FBLoginView extends Component {
               </View>
             </Icon.Button>
             :
-            <Icon.Button onPress={() => { this.context.logout() }}
-              color={"#fff"}
-              backgroundColor={"#3d5898"} name={"facebook"}  size={20} borderRadius={100} >
-              <View style={{alignItems:'center',padding:6}}>
-                <Text style={{color:'#fff'}}> Đăng Xuất </Text>
-              </View>
-            </Icon.Button>
+            // 
+            <View></View>
           }
           </View>
       )
     }
 }
-export default FBLoginView;
+const mapStateToProps = (state) => {
+    return {
+      UserData:state.UserData,
+    }
+  }
+  
+export default connect(mapStateToProps)(FBLoginView)

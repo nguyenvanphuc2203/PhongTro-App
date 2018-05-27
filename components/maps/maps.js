@@ -7,7 +7,8 @@ import {
   Button,
   TextInput,
   TouchableOpacity,
-  Image
+  Image,
+  ActivityIndicator
 } from 'react-native';
 import MapView,{ Marker,Callout, AnimatedRegion, Animated } from 'react-native-maps';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
@@ -39,7 +40,8 @@ export default class Maps extends React.Component {
         latitude: 0,
         longitude: 0,
       },
-      data_maps:[]
+      data_maps:[],
+      loading:false
     }
   }
   getGPS(){
@@ -70,13 +72,28 @@ export default class Maps extends React.Component {
         .then((response) => response.json())
         .then((responseJson) => {
           console.log(responseJson)
-          this.setState({ data_maps: responseJson }) ;
+          this.setState({ data_maps: responseJson ,loading:true}) ;
         })
         .catch((error) => {
           console.error(error);
         });
     }
   render() {
+    if ( !this.state.loading ) return (
+      <ActivityIndicator
+        color='red'
+        size='large'
+        style={{
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          top: 0,
+          bottom: 0,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      />
+    )
     return (
       <View style ={styles.container}>
           <View style={{flexDirection:'row',width:'94%',flex:1,borderRadius:7,zIndex:1,top:25,left:15,position:'absolute',backgroundColor:'#689d3f'}}>

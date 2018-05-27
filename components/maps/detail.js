@@ -9,10 +9,12 @@ import {
     ScrollView,
     TextInput,
     Dimensions,
-    TouchableOpacity
+    TouchableOpacity,
+    ActivityIndicator
 } from 'react-native';
 import { TabNavigator } from 'react-navigation';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { Actions } from 'react-native-router-flux'; // New code
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
 
 
@@ -39,9 +41,24 @@ export default class Detail extends Component{
         header: null
     })
     render(){
+        if ( !this.state.loading ) return (
+            <ActivityIndicator
+              color='red'
+              size='large'
+              style={{
+                position: 'absolute',
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            />
+          )
         return (
             <View style={style.main}>
-                <View style={{flex:1/13,flexDirection:"row",justifyContent:'center',backgroundColor:'#f1f8fe'}}>
+                <View style={{height:50,flexDirection:"row",justifyContent:'center',backgroundColor:'#f1f8fe'}}>
                     <TouchableOpacity onPress={()=>{ Actions.pop()}} style={{flex:1,paddingLeft:10,justifyContent:'center'}} >
                         <Icon name="ios-arrow-round-back" size={40} color="red" />
                     </TouchableOpacity>
