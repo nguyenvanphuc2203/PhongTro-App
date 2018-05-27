@@ -42,6 +42,7 @@ export default class MapChoThue extends React.Component {
       },
       data_maps:[]
     }
+    ToastAndroid.show('Nhẫn giữ để pick vị trí !', ToastAndroid.SHORT);
   }
   getGPS(){
       navigator.geolocation.getCurrentPosition(
@@ -62,7 +63,7 @@ export default class MapChoThue extends React.Component {
          (error) => {
           alert(error.message)
          },
-         { enableHighAccuracy: true, timeout: 20000, maximumAge: 20000 }
+         {enableHighAccuracy: false, timeout: 15000, maximumAge: 3600000}
          
       )
 
@@ -82,7 +83,7 @@ export default class MapChoThue extends React.Component {
   onDragEnd(e){
     this.setState({ coordinate: e.nativeEvent.coordinate});
     if (this.state.coordinate.latitude == 0)
-      alert('Tọa độ hiện tại '+this.state.coordinate.latitude)
+      alert('Vị trí không khả dụng!')
     else
     Actions.Formchothue({location:this.state.coordinate})
   }

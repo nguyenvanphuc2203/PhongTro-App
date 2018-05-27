@@ -63,7 +63,7 @@ export default class Maps extends React.Component {
          (error) => {
           alert(error.message)
          },
-         { enableHighAccuracy: true, timeout: 20000, maximumAge: 20000 }
+         {enableHighAccuracy: false, timeout: 15000, maximumAge: 3600000}
 
       )
     }
@@ -177,7 +177,7 @@ export default class Maps extends React.Component {
             </Marker>
             <Marker 
               coordinate={this.state.coordinate}
-              image={require('../images/pin.png')}
+              image={{uri:'https://i.imgur.com/w8j7HEo.png',width:50,height:50}}
               title='đây là vị trí của bạn'
               description='Định vị GPS'
               onDragEnd={(e) => this.setState({ coordinate: e.nativeEvent.coordinate })}
@@ -188,7 +188,7 @@ export default class Maps extends React.Component {
               this.state.data_maps.map(item => 
                 <Marker 
                   key={item._id}
-                  coordinate={{latitude: 15.971261, longitude: 108.250007}}
+                  coordinate={{latitude: item.lat, longitude: item.lng}}
                   image={{uri:'https://i.imgur.com/9G5JOp8.png',width:50,height:50}}
                   title='Phòng Trọ có gác lửng'
                   description='1.500.000đ'
@@ -196,8 +196,8 @@ export default class Maps extends React.Component {
                 >
                   <Callout onPress={()=>{ Actions.Detail({title:item.title,id:item._id}) }}>
                       <Image source={{uri:item.thumbnail}} style={{width:200,height:100}}/>
-                      <Text>{item.address}</Text>
-                      <Text style={{color:'red'}}>{item.price}</Text>
+                      <Text style={{width:200}}>{item.address}</Text>
+                      <Text style={{color:'red',width:200}}>{item.price}</Text>
                   </Callout>
                 </Marker>
               )

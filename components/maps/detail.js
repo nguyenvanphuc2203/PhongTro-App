@@ -137,7 +137,7 @@ class Comments extends React.Component {
                         />
                     </View>
                     <View style={style.input_button}>
-                        <Button color="blue" title="send"/>
+                        <Button onPress={()=>{}} color="blue" title="send"/>
                     </View>
                 </View>
                 <ScrollView>
@@ -164,11 +164,11 @@ const TabContent =  TabNavigator({
     'Đánh Giá': { screen: props => <Comments content={props.screenProps.content} /> }
 },{
     tabBarOptions: {
-      activeTintColor: '#fff',
-      inactiveTintColor:'#fff',
+      activeTintColor: 'black',
+      inactiveTintColor:'#333',
       activeTabStyle: {
-        color:"#fff",
-        backgroundColor: '#689d3f',
+        color:"#333",
+        backgroundColor: '#f1f8fe',
       },
       tabStyle: {
         height: 35, 
@@ -177,7 +177,7 @@ const TabContent =  TabNavigator({
         fontSize: 12,
       },
       style: {
-        backgroundColor: '#689d3f',
+        backgroundColor: '#f1f8fe',
       },
     },
     tabBarPosition: 'top'

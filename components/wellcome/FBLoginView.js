@@ -23,9 +23,9 @@ class FBLoginView extends Component {
           {( !this.context.isLoggedIn ) ? 
             <Icon.Button onPress={() => { this.context.login() }}
               color={"#fff"}
-              backgroundColor={"#3d5898"} name={"facebook"}  size={20} borderRadius={100} >
+              backgroundColor={"#3d5898"} name={"facebook"}  size={20} borderRadius={4} >
               <View style={{alignItems:'center',padding:6}}>
-                <Text style={{color:'#fff'}}> Login with Facebook</Text>
+                <Text style={{color:'#fff'}}> Đăng nhập với Facebook</Text>
               </View>
             </Icon.Button>
             :

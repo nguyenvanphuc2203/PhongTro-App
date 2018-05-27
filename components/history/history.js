@@ -9,7 +9,6 @@ import {
     Image,
     ActivityIndicator
 } from 'react-native';
-import { ListItem } from 'react-native-elements'
 
 class History extends Component{
     constructor(props){
@@ -68,16 +67,21 @@ class History extends Component{
         else
         return (
             <View style={style.History}>
-                {
-                    this.state.historyData.map((l, i) => (
-                    <ListItem
-                        key={i}
-                        leftAvatar={{ source: { uri: l.thumbnail } }}
-                        title={l.title}
-                        subtitle={l.address}
-                    />
-                    ))
-                }
+                <FlatList
+                    data={this.state.historyData}
+                    renderItem={({item}) =>
+                    <View style={style.itembox}>
+                        <View style={style.item_image}>
+                            <Image source={{uri:item.thumbnail}} style={{width:60,height:50,borderRadius:5}} />
+                        </View>
+                        <View style={style.item_content}>
+                            <Text numberOfLines={1}>{item.address}</Text>
+                            <Text  style={{color:'red',marginTop:3}}>{item.price}</Text>
+                        </View>
+                    </View>
+                        
+                    }
+                />
             </View>
             
         )
@@ -92,16 +96,21 @@ const style = StyleSheet.create({
         backgroundColor:'#e9ebee',
     },
     itembox:{
+        marginTop:9,
         height:70,
         backgroundColor:'#fff',
         flex:1,
         flexDirection:'row'
     },
     item_image:{
-        flex:2
+        flex:2,
+        padding:10,
+        marginLeft:10
     },
     item_content:{
-        flex:8
+        flex:8,
+        padding:10,
+        flexDirection:'column'
     }
 })
 const mapStateToProps = (state) => {

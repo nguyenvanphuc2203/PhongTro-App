@@ -18,10 +18,9 @@ import FBLoginView from './FBLoginView';
 class Wellcome extends Component{
 
   componentWillMount(){
-    
-    // if( this.props.UserData.isLogin ) {
+    if( this.props.UserData.isLogin ) {
       Actions.Home()
-    // }
+    }
   }
   static navigationOptions = () => ({
     header: null
@@ -48,14 +47,16 @@ class Wellcome extends Component{
     return (
       <View style={styles.login}>
         <StatusBar
-         backgroundColor="#e9ebee"
+         backgroundColor="#3ab087"
          barStyle="light-content"
        />
         <View style={{alignItems:'center'}}>
-          {/* <Image
-            style={{width: 50, height: 50}}
-            source={require('../images/logo.png')}
-          /> */}
+          <View style={{padding:20}}>
+            <Image
+              style={{width: 120, height: 100}}
+              source={require('../images/logo.png')}
+            />
+          </View>
           <FBLogin
             buttonView={<FBLoginView />}
             ref={(fbLogin) => { this.fbLogin = fbLogin }}
@@ -78,7 +79,7 @@ class Wellcome extends Component{
 const styles = StyleSheet.create({
     login:{
         flex:1,
-        backgroundColor:'#e9ebee',
+        backgroundColor:'#3ab087',
         justifyContent:'center',
     },
 })
