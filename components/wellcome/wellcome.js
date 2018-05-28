@@ -47,9 +47,9 @@ class Wellcome extends Component{
     return (
       <View style={styles.login}>
         <StatusBar
-         backgroundColor="#3ab087"
-         barStyle="light-content"
-       />
+          backgroundColor="#3ab087"
+          barStyle="light-content"
+        />
         <View style={{alignItems:'center'}}>
           <View style={{padding:20}}>
             <Image

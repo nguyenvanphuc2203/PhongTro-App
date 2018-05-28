@@ -11,7 +11,8 @@ import {
     TextInput,
     Dimensions,
     TouchableOpacity,
-    ActivityIndicator
+    ActivityIndicator,
+    ToastAndroid
 } from 'react-native';
 import { TabNavigator } from 'react-navigation';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -45,7 +46,8 @@ class FormChoThue extends Component{
             price:'',
             service:[],
             phone:'',
-            tags:[]
+            tags:[],
+            loading:false
         }
     }
     componentWillMount() {
@@ -92,7 +94,8 @@ class FormChoThue extends Component{
         });
     }
     postItem(){
-        let { location } = this.props.navigation.state.params
+        let { location } = this.props.navigation.state.params;
+        this.setState({loading:true})
         if ( this.state.title != '' && this.state.price != '' ) {
           // post data to server node 
           fetch('https://phongtro-nodejs.herokuapp.com/postitem', {
@@ -109,14 +112,21 @@ class FormChoThue extends Component{
               price: this.state.price,
               phone: this.state.phone,
               user_id:this.props.UserData.id,
+              user_avatar: this.props.UserData.picture.data.url,
               status: true,
               thumbnail:this.state.thumbnail,
               service: this.state.tags,
               comments:[]
             }),
+          }).then((response) => {
+              this.setState({loading:false})
+              ToastAndroid.show('Đăng tin thành công !', ToastAndroid.SHORT);
+              Actions.Home()
+          })
+          .catch((error) => {
+            console.log(error);
           });
-          ToastAndroid.show('Nhẫn giữ để pick vị trí !', ToastAndroid.SHORT);
-          Actions.Home()
+          
         }else{
           alert('vui lòng điền đầy đủ thông tin !')
         }
@@ -124,6 +134,21 @@ class FormChoThue extends Component{
       }
     render(){
         let avatar = this.state.avatarSource;
+        if ( this.state.loading ) return (
+            <ActivityIndicator
+              color='red'
+              size='large'
+              style={{
+                position: 'absolute',
+                left: 0,
+                right: 0,
+                top: 0,
+                bottom: 0,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            />
+        )
         return( 
             <View style={style.main}>
                 <View style={{height:50,flexDirection:"row",justifyContent:'center',backgroundColor:'#f1f8fe'}}>
@@ -164,7 +189,7 @@ class FormChoThue extends Component{
                         <View style={{padding:10}}>
                             <TouchableOpacity onPress={this.chooseImage.bind(this)}>
                             <Image
-                                style={{width:200,height:150,borderRadius:10}}
+                                style={{width:'100%',height:170,borderRadius:10}}
                                 source={avatar}
                             />
                             </TouchableOpacity>

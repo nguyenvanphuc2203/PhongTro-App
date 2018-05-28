@@ -13,6 +13,8 @@ import {
 import MapView,{ Marker,Callout, AnimatedRegion, Animated } from 'react-native-maps';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 import { Actions } from 'react-native-router-flux';
+import Icon from 'react-native-vector-icons/Ionicons';
+
 
 const styles = StyleSheet.create({
   container: {
@@ -31,7 +33,7 @@ export default class Maps extends React.Component {
     super(props);
     this.state = {
       initialPosition: {
-        latitude: 15.9710189,
+        latitude: 15.9920189,
         longitude: 108.2293462,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
@@ -121,16 +123,15 @@ export default class Maps extends React.Component {
                 }}
                 styles={{
                   textInputContainer: {
-                    backgroundColor: '#689d3f',
+                    backgroundColor: 'rgba(0,0,0,0)',
                     borderTopWidth: 0,
-                    borderBottomWidth:0,
-                    borderRadius:5
+                    borderBottomWidth:0
                   },
                   textInput: {
                     marginLeft: 0,
                     marginRight: 0,
                     height: 38,
-                    color: '#fff',
+                    color: '#5d5d5d',
                     fontSize: 16
                   },
                   predefinedPlacesDescription: {
@@ -177,7 +178,6 @@ export default class Maps extends React.Component {
             </Marker>
             <Marker 
               coordinate={this.state.coordinate}
-              image={{uri:'https://i.imgur.com/w8j7HEo.png',width:50,height:50}}
               title='đây là vị trí của bạn'
               description='Định vị GPS'
               onDragEnd={(e) => this.setState({ coordinate: e.nativeEvent.coordinate })}
@@ -195,9 +195,22 @@ export default class Maps extends React.Component {
                   onDragEnd={(e) => this.setState({ coordinate: e.nativeEvent.coordinate })}
                 >
                   <Callout onPress={()=>{ Actions.Detail({title:item.title,id:item._id}) }}>
-                      <Image source={{uri:item.thumbnail}} style={{width:200,height:100}}/>
-                      <Text style={{width:200}}>{item.address}</Text>
-                      <Text style={{color:'red',width:200}}>{item.price}</Text>
+                      <View style={{backgroundColor:'#e9ebee'}}>
+                        <Image source={{uri:item.thumbnail}} style={{width:200,height:100}}/>
+                        <Text style={{width:200,marginTop:3,backgroundColor:'#fff'}}>{item.address}</Text>
+                        <View style={{flex:1,flexDirection:'row',marginTop:3,backgroundColor:'#fff'}}>
+                          <Text style={{color:'red',width:200}}>Giá/Tháng : {item.price} VNĐ</Text>
+                        </View>
+                        <View style={{flex:1,width:200,flexDirection:'row',marginTop:3,backgroundColor:'#fff'}}>
+                          {
+                              item.status ? 
+                              <Text style={{marginTop:3,backgroundColor:'#fff',flex:8,alignItems:'flex-start',justifyContent:'center'}}><Icon name="ios-checkmark-circle-outline" size={20} color="green" /> Chưa Cho Thuê</Text> : 
+                              <Text style={{marginTop:3,backgroundColor:'#fff',flex:8,alignItems:'flex-start',justifyContent:'center'}}><Icon name="ios-close-circle-outline" size={20} color="red" /> Đã Cho Thuê</Text>
+                          }
+                          <Text style={{flex:2,alignItems:'flex-end',width:200}}>{item.comments.length} <Icon name="ios-chatbubbles-outline" size={20} color="green" /></Text>
+                        </View>
+                        
+                      </View>
                   </Callout>
                 </Marker>
               )

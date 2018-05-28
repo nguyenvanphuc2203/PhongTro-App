@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux'
 import {
     StyleSheet,
     Text,
@@ -10,21 +11,25 @@ import {
     TextInput,
     Dimensions,
     TouchableOpacity,
-    ActivityIndicator
+    ActivityIndicator,
+    ToastAndroid
 } from 'react-native';
 import { TabNavigator } from 'react-navigation';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Actions } from 'react-native-router-flux'; // New code
+import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements'
+
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
 
-
-export default class Detail extends Component{
+var USER_IMAGE='';
+class Detail extends Component{
     constructor(props){
         super(props);
         this.state = {
             data:{ thumbnail:'https://i.imgur.com/zGD4U5O.png' },
             loading:false
         }
+        USER_IMAGE=this.props.UserData.picture.data.url;
     }
     componentWillMount() {
         fetch('https://phongtro-nodejs.herokuapp.com/finditem/'+this.props.navigation.state.params.id)
@@ -66,7 +71,7 @@ export default class Detail extends Component{
                         <Text>{this.props.navigation.state.params.title} </Text>
                         <Text style={{color:'#333',fontSize:10}}> 09:29</Text>
                     </View>
-                    <View style={{flex:2,justifyContent:'center'}}> 
+                    <View style={{flex:2,justifyContent:'center'}}>
                     </View>
                 </View>
                 <View style={{flex:12/13}}>
@@ -78,6 +83,17 @@ export default class Detail extends Component{
                     </View>
                     <View style={style.content}>
                         { this.state.loading && <TabContent  screenProps={{ content: this.state.data}}/> }
+                    </View>
+                </View>
+                <View style={{flex:1/13}}>
+                    <View style={style.action}>
+                        <View style={{flex:1,padding:5}}>
+                            <Button title="3.000.000 VNĐ" color="red"/>
+                        </View>
+                        <View style={{flex:1,padding:5}}>
+                            <Button title="0964357189" color="#3ab087"/>
+                        </View>
+                        
                     </View>
                 </View>
             </View>
@@ -95,10 +111,16 @@ class Infomation extends React.Component {
         return (
             <View style={{ flex: 1,}}>
                 <View style={style.info}>
-                    <Text>{this.props.content.address}</Text>
+                    <Text> 
+                        <Icon name="ios-pin" size={20} color="red" /> - { this.props.content.address}
+                    </Text>
                 </View>
                 <View style={style.price}>
-                    <Text>{this.props.content.price} VNĐ/THÁNG</Text>
+                    {
+                        this.props.content.status ? 
+                        <Text><Icon name="ios-checkmark-circle-outline" size={20} color="green" /> Chưa Cho Thuê</Text> : 
+                        <Text><Icon name="ios-close-circle-outline" size={20} color="red" /> Đã Cho Thuê</Text>
+                    }
                 </View>
                 <View style={style.service}>
                     <Text>Dịch Vụ</Text>
@@ -121,8 +143,40 @@ class Comments extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            text:'Bình luận'
+            text:'Bình luận',
+            comments:[]
         }
+    }
+    componentWillMount(){
+        this.setState({comments:this.props.content.comments})
+    }
+    shouldComponentUpdate(){
+        return true
+    }
+    postComment(){
+        if (this.state.text != ''){
+            fetch('https://phongtro-nodejs.herokuapp.com/addcomment', {
+                method: 'POST',
+                headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                id: this.props.content._id,
+                user_image: USER_IMAGE,
+                comment: this.state.text
+                }),
+            });
+            ToastAndroid.show('Cảm ơn bạn đã phản hồi !', ToastAndroid.SHORT);
+            this.state.comments.push({user_image: USER_IMAGE,comment: this.state.text})
+            this.setState({
+                text:'',
+                comments:this.state.comments
+            })
+        }else{
+            ToastAndroid.show('Nhập bình luận !', ToastAndroid.SHORT);
+        }
+        
     }
     render() {
         console.log(this.props.content.comments)
@@ -130,19 +184,17 @@ class Comments extends React.Component {
             <View style={{ flex: 1 }}>
                 <View style={style.input_comment}>
                     <View style={style.input_text}>
-                        <TextInput
-                            style={{ width:'100%',height: 40, borderColor: '#333', borderWidth: 1}}
-                            onChangeText={(text) => this.setState({text:text})}
-                            placeholder="Nhập đánh giá của bạn!"
-                        />
+                    <FormInput 
+                            placeholder="Nhập đánh giá của bạn"
+                            onChangeText={(e)=>{this.setState({text:e})}}/>
                     </View>
                     <View style={style.input_button}>
-                        <Button onPress={()=>{}} color="blue" title="send"/>
+                        <Button onPress={this.postComment.bind(this)} color="#3ab087" title="send"/>
                     </View>
                 </View>
                 <ScrollView>
                     {   
-                        this.props.content.comments.map(item =>
+                        this.state.comments.map(item =>
                             <View key={item.comment} style={style.comments}>
                                 <View style={style.comment_image}>
                                     <Image source={{uri:item.user_image}} style={{width:50,height:50,borderRadius:25}} />
@@ -195,13 +247,17 @@ const style = StyleSheet.create({
     content:{
         flex:7
     },
+    action:{
+        flex:1,
+        flexDirection:'row'
+    },
     info:{
         height: 40,
         marginTop:5,
         backgroundColor:'#fff',
         justifyContent:'center',
         alignItems:'flex-start',
-        paddingLeft:5
+        paddingLeft:10
     },
     price:{
         height: 40,
@@ -209,9 +265,7 @@ const style = StyleSheet.create({
         backgroundColor:'#fff',
         justifyContent:'center',
         alignItems:'flex-start',
-        paddingLeft:4,
-        borderLeftWidth:5,
-        borderLeftColor:'red'
+        paddingLeft:10,
     },
     service:{
         height:40,
@@ -237,22 +291,24 @@ const style = StyleSheet.create({
         flexDirection:'row'
     },
     comment_image:{
-        flex:2,
+        flex:1,
         justifyContent:'center',
-        alignItems:'center'
+        alignItems:'center',
+        padding:5,
+        paddingLeft:10,
     },
     comment_text:{
-        flex:8,
+        flex:9,
         justifyContent:'center',
-        alignItems:'center'
+        padding:20
     },
     input_comment:{
-        height: 38,
+        height: 40,
         marginTop:5,
         backgroundColor:'#fff',
         justifyContent:'center',
         alignItems:'flex-start',
-        paddingLeft:5,
+        padding:1,
         flexDirection:'row'
     },
     input_text:{
@@ -263,3 +319,12 @@ const style = StyleSheet.create({
     }
 
 })
+
+
+const mapStateToProps = (state) => {
+    return {
+      UserData:state.UserData,
+    }
+  }
+  
+export default connect(mapStateToProps)(Detail)
