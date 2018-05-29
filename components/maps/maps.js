@@ -170,7 +170,6 @@ export default class Maps extends React.Component {
           > 
             <Marker 
               coordinate={this.state.initialPosition}
-              image={require('../images/pin.png')}
               title='Vị Trí Cần tìm'
               description='tìm kiếm xung quanh'
               onDragEnd={(e) => this.setState({ coordinate: e.nativeEvent.coordinate })}

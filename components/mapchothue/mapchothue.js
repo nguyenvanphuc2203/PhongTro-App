@@ -164,7 +164,7 @@ export default class MapChoThue extends React.Component {
           >
             <Marker draggable
               coordinate={this.state.initialPosition}
-              image={require('../images/pin.png')}
+              image={require('../images/location_picker.png')}
               title='Nhấn Giữ Để Chọn'
               description='Drag to pick'
               onDragEnd={(e) => { this.onDragEnd(e) }}

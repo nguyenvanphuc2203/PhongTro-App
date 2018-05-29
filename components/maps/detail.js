@@ -12,7 +12,8 @@ import {
     Dimensions,
     TouchableOpacity,
     ActivityIndicator,
-    ToastAndroid
+    ToastAndroid,
+    Keyboard
 } from 'react-native';
 import { TabNavigator } from 'react-navigation';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -172,7 +173,8 @@ class Comments extends React.Component {
             this.setState({
                 text:'',
                 comments:this.state.comments
-            })
+            });
+            Keyboard.dismiss()
         }else{
             ToastAndroid.show('Nhập bình luận !', ToastAndroid.SHORT);
         }

@@ -53,8 +53,8 @@ class Wellcome extends Component{
         <View style={{alignItems:'center'}}>
           <View style={{padding:20}}>
             <Image
-              style={{width: 120, height: 100}}
-              source={require('../images/logo.png')}
+              style={{width: 170, height: 140}}
+              source={require('../images/logo1.png')}
             />
           </View>
           <FBLogin

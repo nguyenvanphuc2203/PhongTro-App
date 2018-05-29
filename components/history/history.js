@@ -7,8 +7,13 @@ import {
     Button,
     FlatList,
     Image,
-    ActivityIndicator
+    ActivityIndicator,
+    Alert,
+    ToastAndroid,
+    TouchableOpacity
 } from 'react-native';
+import { SwipeListView } from 'react-native-swipe-list-view';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 class History extends Component{
     constructor(props){
@@ -27,8 +32,9 @@ class History extends Component{
             ],
             loading:false
         }
+        this.getHistory()
     }
-    componentWillMount(){
+    getHistory(){
         setTimeout(()=>{
           fetch('https://phongtro-nodejs.herokuapp.com/history/'+this.props.UserData.id)
           .then((response) => response.json())
@@ -41,6 +47,70 @@ class History extends Component{
           });
         },2000)
          
+    }
+    changeStatus(id,status){
+        Alert.alert(
+            'Notification',
+            'Change status ?',
+            [
+              {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+              {text: 'OK', onPress: () => {
+                    this.setState({loading:true})
+                    // post data to server node 
+                    fetch('https://phongtro-nodejs.herokuapp.com/updatestatus', {
+                        method: 'POST',
+                        headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                        id: id,
+                        status: !status
+                        }),
+                    }).then((response) => {
+                        this.setState({loading:false})
+                        ToastAndroid.show('Changed status !', ToastAndroid.SHORT);
+                        this.getHistory()
+                    })
+                    .catch((error) => {
+                      console.log(error);
+                    });;;
+                    
+                }},
+            ],
+            { cancelable: false }
+          )
+    }
+    deleteHistory(id){
+        Alert.alert(
+            'Notification',
+            'Delete your post ?',
+            [
+              {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
+              {text: 'OK', onPress: () => {
+                this.setState({loading:true})
+                fetch('https://phongtro-nodejs.herokuapp.com/delete-history', {
+                    method: 'POST',
+                    headers: {
+                      Accept: 'application/json',
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                      id: id
+                    }),
+                  }).then((response) => {
+                    this.setState({loading:false})
+                    ToastAndroid.show('deleted !', ToastAndroid.SHORT);
+                    this.getHistory()
+                })
+                .catch((error) => {
+                  console.log(error);
+                });;
+                  
+              }},
+            ],
+            { cancelable: false }
+          )
       }
     render(){
         if ( !this.state.loading ) return (
@@ -55,6 +125,7 @@ class History extends Component{
                 bottom: 0,
                 alignItems: 'center',
                 justifyContent: 'center',
+                opacity: 0.5,
               }}
             />
           )
@@ -66,23 +137,43 @@ class History extends Component{
         )
         else
         return (
-            <View style={style.History}>
-                <FlatList
-                    data={this.state.historyData}
-                    renderItem={({item}) =>
+            <SwipeListView
+                useFlatList
+                data={this.state.historyData}
+                disableRightSwipe={true}
+                renderItem={ data => (
                     <View style={style.itembox}>
                         <View style={style.item_image}>
-                            <Image source={{uri:item.thumbnail}} style={{width:60,height:50,borderRadius:5}} />
+                            <Image source={{uri:data.item.thumbnail}} style={{width:60,height:50,borderRadius:5}} />
                         </View>
                         <View style={style.item_content}>
-                            <Text numberOfLines={1}>{item.address}</Text>
-                            <Text  style={{color:'red',marginTop:3}}>{item.price}</Text>
+                            <Text  style={{color:'#333',marginTop:3}} numberOfLines={1}>{data.item.address}</Text>
+                            <Text  style={{color:'red',marginTop:3}}>{data.item.price} VNĐ/THÁNG</Text>
                         </View>
                     </View>
-                        
-                    }
-                />
-            </View>
+                )}
+                renderHiddenItem={ data => (
+                    <View style={style.rowBack}>
+                        <Text style={{flex:7.5}}></Text>
+                        <View style={{flex:2.5,flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
+                            <TouchableOpacity
+                                style={{backgroundColor:'#3ab087',padding:10,borderRadius:4}} 
+                                onPress={()=>{this.changeStatus(data.item._id,data.item.status)}}>
+                                {
+                                    data.item.status ? <Icon name="ios-checkmark-circle" size={25} color="#fff" /> : <Icon name="ios-close-circle" size={25} color="#fff" />
+                                }
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={{backgroundColor:'red',padding:10,borderRadius:2}} 
+                                onPress={()=>{this.deleteHistory(data.item._id)}} >
+                                <Icon name="md-trash" size={25} color="#fff" />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                )}
+                leftOpenValue={0}
+                rightOpenValue={-90}
+            />
             
         )
     }
@@ -96,11 +187,13 @@ const style = StyleSheet.create({
         backgroundColor:'#e9ebee',
     },
     itembox:{
-        marginTop:9,
+        borderTopWidth:5,
+        borderTopColor:'#e9ebee',
         height:70,
-        backgroundColor:'#fff',
         flex:1,
-        flexDirection:'row'
+        flexDirection:'row',
+		backgroundColor: '#fff',
+		justifyContent: 'center',
     },
     item_image:{
         flex:2,
@@ -111,7 +204,24 @@ const style = StyleSheet.create({
         flex:8,
         padding:10,
         flexDirection:'column'
-    }
+    },
+    rowFront: {
+        alignItems: 'center',
+        backgroundColor: '#ccc',
+        justifyContent: 'center',
+        height: 70,
+    },
+    rowBack: {
+        borderTopWidth:5,
+        borderTopColor:'#e9ebee',
+		alignItems: 'center',
+		backgroundColor: '#fff',
+		flex: 1,
+        flexDirection: 'row',
+        alignItems:'center',
+		justifyContent: 'space-between',
+		paddingLeft: 15,
+	}
 })
 const mapStateToProps = (state) => {
     return {
