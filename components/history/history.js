@@ -49,9 +49,12 @@ class History extends Component{
          
     }
     changeStatus(id,status){
+        var statusText = ''
+        if ( !status ) statusText = 'Chưa cho thuê' ;
+        else statusText = 'Đã cho thuê';
         Alert.alert(
-            'Notification',
-            'Change status ?',
+            'Thông Báo',
+            'Đánh dấu '+statusText,
             [
               {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
               {text: 'OK', onPress: () => {
@@ -69,7 +72,7 @@ class History extends Component{
                         }),
                     }).then((response) => {
                         this.setState({loading:false})
-                        ToastAndroid.show('Changed status !', ToastAndroid.SHORT);
+                        ToastAndroid.show('Thay đổi trạng thái thành công !', ToastAndroid.SHORT);
                         this.getHistory()
                     })
                     .catch((error) => {
@@ -83,8 +86,8 @@ class History extends Component{
     }
     deleteHistory(id){
         Alert.alert(
-            'Notification',
-            'Delete your post ?',
+            'Thông báo',
+            'Bạn muốn xóa bài đăng này ?',
             [
               {text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel'},
               {text: 'OK', onPress: () => {
@@ -160,7 +163,7 @@ class History extends Component{
                                 style={{backgroundColor:'#3ab087',padding:10,borderRadius:4}} 
                                 onPress={()=>{this.changeStatus(data.item._id,data.item.status)}}>
                                 {
-                                    data.item.status ? <Icon name="ios-checkmark-circle" size={25} color="#fff" /> : <Icon name="ios-close-circle" size={25} color="#fff" />
+                                    data.item.status ? <Icon name="ios-close-circle" size={25} color="#fff" /> : <Icon name="ios-checkmark-circle" size={25} color="#fff" /> 
                                 }
                             </TouchableOpacity>
                             <TouchableOpacity

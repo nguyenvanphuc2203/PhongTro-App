@@ -7,6 +7,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@cutii/react-native-tag-input": "0.0.18",
     "react": "16.2.0",
     "react-native": "0.51.0",
     "react-native-cloudinary": "^1.0.1",

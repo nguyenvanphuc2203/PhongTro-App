@@ -89,10 +89,10 @@ class Detail extends Component{
                 <View style={{flex:1/13}}>
                     <View style={style.action}>
                         <View style={{flex:1,padding:5}}>
-                            <Button title="3.000.000 VNĐ" color="red"/>
+                            <Button onPress={()=>{}} title="3.000.000 VNĐ" color="red"/>
                         </View>
                         <View style={{flex:1,padding:5}}>
-                            <Button title="0964357189" color="#3ab087"/>
+                            <Button onPress={()=>{}} title="0964357189" color="#3ab087"/>
                         </View>
                         
                     </View>
@@ -129,8 +129,8 @@ class Infomation extends React.Component {
                 <ScrollView>
                     {   
                         this.props.content.service.map(item =>
-                            <View key={item.id} style={style.service_item}>
-                                <Text>{item.text}</Text>
+                            <View key={item} style={style.service_item}>
+                                <Text>{item}</Text>
                             </View>
                         )
                     }
@@ -144,7 +144,7 @@ class Comments extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            text:'Bình luận',
+            text:'',
             comments:[]
         }
     }
@@ -187,6 +187,7 @@ class Comments extends React.Component {
                 <View style={style.input_comment}>
                     <View style={style.input_text}>
                     <FormInput 
+                            value={this.state.text}
                             placeholder="Nhập đánh giá của bạn"
                             onChangeText={(e)=>{this.setState({text:e})}}/>
                     </View>

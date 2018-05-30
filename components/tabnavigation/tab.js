@@ -25,30 +25,30 @@ export default class Tabnavigation extends React.Component {
   render() {
     return (
         <TabNavigator
-            tabBarStyle={{ backgroundColor:'#fff' }}
+            tabBarStyle={{ backgroundColor:'#e9ebee' }}
             tabBarShadowStyle={{ borderTopWidth: 0,marginBottom: 5 }}
          >
             <TabNavigator.Item
               selected={this.state.selectedTab === 'home'}
               title="Tìm Trọ"
-              renderIcon={() =>  <Icon name="ios-home-outline" size={24} color="green" />}
-              renderSelectedIcon={() =>  <Icon name="ios-home" size={24} color="green" />}
+              renderIcon={() =>  <Icon name="ios-home-outline" size={24} color="#3ab087" />}
+              renderSelectedIcon={() =>  <Icon name="ios-home" size={24} color="#3ab087" />}
               onPress={() => this.setState({ selectedTab: 'home' })}>
               <Maps/>
             </TabNavigator.Item>
             <TabNavigator.Item
               selected={this.state.selectedTab === 'post'}
               title="Đăng Tin"
-              renderIcon={() => <Icon name="ios-add-circle-outline" size={24} color="green" />}
-              renderSelectedIcon={() => <Icon name="ios-add-circle" size={24} color="green" />}
+              renderIcon={() => <Icon name="ios-add-circle-outline" size={24} color="#3ab087" />}
+              renderSelectedIcon={() => <Icon name="ios-add-circle" size={24} color="#3ab087" />}
               onPress={() => this.setState({ selectedTab: 'post' })}>
               <MapChothue/>
             </TabNavigator.Item>
             <TabNavigator.Item
               selected={this.state.selectedTab === 'history'}
               title="Lịch Sử"
-              renderIcon={() => <Icon name="ios-alarm-outline" size={24} color="green" />}
-              renderSelectedIcon={() => <Icon name="ios-alarm" size={24} color="green" />}
+              renderIcon={() => <Icon name="ios-alarm-outline" size={24} color="#3ab087" />}
+              renderSelectedIcon={() => <Icon name="ios-alarm" size={24} color="#3ab087" />}
               badgeText="1"
               onPress={() => this.setState({ selectedTab: 'history' })}>
               <History/>
@@ -56,8 +56,8 @@ export default class Tabnavigation extends React.Component {
             <TabNavigator.Item
               selected={this.state.selectedTab === 'profile'}
               title="Profile"
-              renderIcon={() => <Icon name="ios-person-outline" size={24} color="green" />}
-              renderSelectedIcon={() => <Icon name="ios-person" size={24} color="green" />}
+              renderIcon={() => <Icon name="ios-person-outline" size={24} color="#3ab087" />}
+              renderSelectedIcon={() => <Icon name="ios-person" size={24} color="#3ab087" />}
               onPress={() => this.setState({ selectedTab: 'profile' })}>
               <Profile/>
             </TabNavigator.Item>

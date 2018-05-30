@@ -17,7 +17,8 @@ import {
 import { TabNavigator } from 'react-navigation';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Actions } from 'react-native-router-flux'; // New code
-import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements'
+import { FormLabel, FormInput, FormValidationMessage } from 'react-native-elements';
+import TagInput from '@cutii/react-native-tag-input';
 
 var ImagePicker = require('react-native-image-picker');
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
@@ -44,7 +45,7 @@ class FormChoThue extends Component{
             title:'',
             thumbnail:'https://i.imgur.com/XlYLI23.jpg',
             price:'',
-            service:[],
+            text:'Những Tiện ích',
             phone:'',
             tags:[],
             loading:false
@@ -58,6 +59,7 @@ class FormChoThue extends Component{
           console.log(responseJson)
           if (responseJson.results.length == 0 ) {
               alert('Vị Trí Ko Tên')
+              this.setState({address:'Vị Trí Không Xác Định Trên Bản Đồ!'})
           }else
           this.setState({address:responseJson.results[0].formatted_address})
         })
@@ -90,13 +92,46 @@ class FormChoThue extends Component{
             this.setState({
               avatarSource: source
             });
+            this.postFormDataToImgur(sourceBase64)
           }
         });
     }
+    postFormDataToImgur(base64) {
+        let clientId = '5afd6b67306a4cb';
+        let clientSecret = "04608dcd172ef4ac90272149c4ed50f9f9f45f2f";
+        let token = false;
+        const formData = new FormData();
+        formData.append('image', base64.split(',')[1])
+        formData.append('type','base64')
+        console.log(formData)
+        let auth;
+        if (token) {
+          auth = 'Bearer ' + token;
+        } else {
+          auth = 'Client-ID ' + clientId;
+        }
+        this.setState({loading:true})
+        fetch('https://api.imgur.com/3/image', {
+          method: 'POST',
+          body: formData,
+          headers: {
+            Authorization: auth,
+            Accept: 'application/json',
+          },
+        }).then((response) => response.json())
+        .then((responseJson) => {
+          console.log(responseJson);
+          this.setState({thumbnail:responseJson.data.link,loading:false})
+          ToastAndroid.show('Upload ảnh thành công !', ToastAndroid.SHORT);
+        })
+        .catch((error) => {
+          console.error(error);
+        });;
+      }
     postItem(){
         let { location } = this.props.navigation.state.params;
         this.setState({loading:true})
-        if ( this.state.title != '' && this.state.price != '' ) {
+        if ( this.state.title != '' || this.state.price != '' || this.state.tags.length == 0 ) {
           // post data to server node 
           fetch('https://phongtro-nodejs.herokuapp.com/postitem', {
             method: 'POST',
@@ -129,6 +164,7 @@ class FormChoThue extends Component{
           
         }else{
           alert('vui lòng điền đầy đủ thông tin !')
+          this.setState({loading:false})
         }
         
       }
@@ -180,11 +216,19 @@ class FormChoThue extends Component{
                             placeholder="Số Điện Thoại *"
                             onChangeText={(e)=>{this.setState({phone:e})}}/>
                         <FormValidationMessage>{this.state.phone == '' &&'This field is required'}</FormValidationMessage>
-                        <FormInput 
-                            ref="service"
-                            placeholder="Dịch Vụ"
-                            onChangeText={(e)=>{}}/>
-                        <FormValidationMessage>{this.state.service.length == 0 &&'This field is required'}</FormValidationMessage>
+                        <View style={{width:'100%',height:60,paddingHorizontal:20}}>
+                          <TagInput
+                            tagContainerStyle={{padding:10}}
+                            value={this.state.tags}
+                            onChange={(tags) => this.setState({tags:tags })}
+                            labelExtractor={(tag) => tag}
+                            text={this.state.text}
+                            onChangeText={(text) => this.setState({ text:text })}
+                            inputDefaultWidth={100}
+                          />
+                        </View>
+
+                        <FormValidationMessage>{this.state.tags.length == 0 &&'This field is required'}</FormValidationMessage>
                         <FormLabel>Chọn Một Bức Ảnh</FormLabel>
                         <View style={{padding:10}}>
                             <TouchableOpacity onPress={this.chooseImage.bind(this)}>

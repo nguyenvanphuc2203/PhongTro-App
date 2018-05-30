@@ -115,34 +115,33 @@ export default class MapChoThue extends React.Component {
                   types: '(cities)' // default: 'geocode'
                 }}
                 styles={{
+                  container:{
+                    backgroundColor: '#3ab087',
+                    borderRadius:6
+                  },
                   textInputContainer: {
                     backgroundColor: 'rgba(0,0,0,0)',
                     borderTopWidth: 0,
                     borderBottomWidth:0
                   },
                   textInput: {
-                    marginLeft: 0,
-                    marginRight: 0,
-                    height: 38,
+                    marginLeft: 6,
+                    marginRight: 6,
+                    height: 30,
                     color: '#5d5d5d',
                     fontSize: 16
                   },
-                  predefinedPlacesDescription: {
-                    color: '#1faadb'
+                  loader:{
+                    color: '#fff'
                   },
-                }}
-                styles={{
-                  textInputContainer: {
-                    width: '100%'
-                  },
-                  description: {
-                    fontWeight: 'bold'
+                  listView:{
+                    backgroundColor: '#fff',
+                    color: '#fff'
                   },
                   predefinedPlacesDescription: {
-                    color: '#1faadb'
-                  }
+                    color: '#fff'
+                  },
                 }}
-                
                 currentLocation={false} // Will add a 'Current location' button at the top of the predefined places list
                 currentLocationLabel="Current location"
                 nearbyPlacesAPI='GooglePlacesSearch' // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch

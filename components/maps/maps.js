@@ -98,7 +98,7 @@ export default class Maps extends React.Component {
     )
     return (
       <View style ={styles.container}>
-          <View style={{flexDirection:'row',width:'94%',flex:1,borderRadius:7,zIndex:1,top:25,left:15,position:'absolute',backgroundColor:'#689d3f'}}>
+          <View style={{flexDirection:'row',width:'94%',flex:1,borderRadius:7,zIndex:1,top:25,left:15,position:'absolute',backgroundColor:'#fff'}}>
             <GooglePlacesAutocomplete
                 placeholder='Nhập Quận/Phường Để Tìm!'
                 minLength={2}
@@ -122,6 +122,10 @@ export default class Maps extends React.Component {
                   types: '(cities)' // default: 'geocode'
                 }}
                 styles={{
+                  container:{
+                    backgroundColor: '#3ab087',
+                    borderRadius:6
+                  },
                   textInputContainer: {
                     backgroundColor: 'rgba(0,0,0,0)',
                     borderTopWidth: 0,
@@ -129,26 +133,23 @@ export default class Maps extends React.Component {
                   },
                   textInput: {
                     marginLeft: 0,
-                    marginRight: 0,
-                    height: 38,
+                    marginRight: 6,
+                    height: 30,
                     color: '#5d5d5d',
                     fontSize: 16
                   },
+                  loader:{
+                    color: '#fff'
+                  },
+                  listView:{
+                    backgroundColor: '#fff',
+                    color: '#fff'
+                  },
                   predefinedPlacesDescription: {
                     color: '#1faadb'
                   },
                 }}
-                styles={{
-                  textInputContainer: {
-                    width: '100%'
-                  },
-                  description: {
-                    fontWeight: 'bold'
-                  },
-                  predefinedPlacesDescription: {
-                    color: '#1faadb'
-                  }
-                }}
+                
                 currentLocation={false} // Will add a 'Current location' button at the top of the predefined places list
                 currentLocationLabel="Current location"
                 nearbyPlacesAPI='GooglePlacesSearch' // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
